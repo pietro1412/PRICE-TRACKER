@@ -10,7 +10,7 @@ from src.core.config import get_settings
 from src.core.database import Base
 
 # Import all models here so Alembic can detect them
-from src.models import Alert, PriceHistory, Tour, User  # noqa: F401
+from src.models import Alert, Notification, PriceHistory, Tour, User  # noqa: F401
 
 config = context.config
 settings = get_settings()

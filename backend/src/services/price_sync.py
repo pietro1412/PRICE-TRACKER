@@ -176,6 +176,15 @@ class PriceSyncService:
             # Update price statistics
             await self._update_price_stats(existing_tour.id, db)
 
+            # Check and trigger alerts for this price change
+            from src.services.alert_service import alert_service
+            await alert_service.check_alerts_for_tour(
+                tour_id=existing_tour.id,
+                old_price=old_price,
+                new_price=tour_data.price,
+                db=db,
+            )
+
             logger.info(
                 f"Price changed for tour {existing_tour.id}",
                 tour_name=existing_tour.name[:50],
