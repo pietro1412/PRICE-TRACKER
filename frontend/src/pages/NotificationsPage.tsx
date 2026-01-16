@@ -86,12 +86,12 @@ export default function NotificationsPage() {
                 <div className="flex items-start gap-4">
                   <div
                     className={`p-2 rounded-lg ${
-                      notification.price_change < 0
+                      parseFloat(notification.price_change) < 0
                         ? 'bg-green-100 text-green-600'
                         : 'bg-red-100 text-red-600'
                     }`}
                   >
-                    {notification.price_change < 0 ? (
+                    {parseFloat(notification.price_change) < 0 ? (
                       <TrendingDown className="w-5 h-5" />
                     ) : (
                       <TrendingUp className="w-5 h-5" />

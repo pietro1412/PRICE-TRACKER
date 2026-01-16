@@ -134,19 +134,19 @@ export default function DashboardPage() {
                       {alert.alert_type === 'price_drop' && (
                         <span className="flex items-center">
                           <TrendingDown className="w-4 h-4 mr-1 text-green-500" />
-                          Sotto {alert.threshold_price}
+                          Sotto €{parseFloat(alert.threshold_price).toFixed(2)}
                         </span>
                       )}
                       {alert.alert_type === 'price_increase' && (
                         <span className="flex items-center">
                           <TrendingUp className="w-4 h-4 mr-1 text-red-500" />
-                          Sopra {alert.threshold_price}
+                          Sopra €{parseFloat(alert.threshold_price).toFixed(2)}
                         </span>
                       )}
                       {alert.alert_type === 'percentage_drop' && (
                         <span className="flex items-center">
                           <TrendingDown className="w-4 h-4 mr-1 text-green-500" />
-                          Calo del {alert.threshold_percentage}%
+                          Calo del {parseFloat(alert.threshold_percentage).toFixed(0)}%
                         </span>
                       )}
                     </p>

@@ -166,15 +166,15 @@ export default function TourDetailPage() {
           <p className="text-sm text-gray-500">Var. 7 giorni</p>
           <p
             className={`text-xl font-bold flex items-center ${
-              parseFloat(stats?.price_change_7d) > 0
+              stats?.price_change_7d && parseFloat(stats.price_change_7d) > 0
                 ? 'text-red-600'
-                : parseFloat(stats?.price_change_7d) < 0
+                : stats?.price_change_7d && parseFloat(stats.price_change_7d) < 0
                 ? 'text-green-600'
                 : 'text-gray-900'
             }`}
           >
-            {parseFloat(stats?.price_change_7d) > 0 && <TrendingUp className="w-5 h-5 mr-1" />}
-            {parseFloat(stats?.price_change_7d) < 0 && <TrendingDown className="w-5 h-5 mr-1" />}
+            {stats?.price_change_7d && parseFloat(stats.price_change_7d) > 0 && <TrendingUp className="w-5 h-5 mr-1" />}
+            {stats?.price_change_7d && parseFloat(stats.price_change_7d) < 0 && <TrendingDown className="w-5 h-5 mr-1" />}
             {stats?.price_change_7d ? `€${parseFloat(stats.price_change_7d).toFixed(2)}` : '-'}
           </p>
         </div>

@@ -237,43 +237,61 @@ class CivitatisScraper:
                         continue
 
                     # Extract displayed price from the card
-                    # Try multiple selectors for price elements
-                    price_selectors = [
-                        ".comfort-card__price__current",
-                        ".m-activity-card__price",
-                        "[class*='price'] span",
-                        ".price-tag",
-                        "span[class*='Price']",
+                    # Look for price with currency symbol to avoid catching ratings
+                    card_text = await card.text_content() or ""
+
+                    # First try to find price with "From" pattern (most reliable)
+                    # Patterns: "From €59", "A partire da €59", "Desde 59 €"
+                    price_value = None
+                    price_patterns = [
+                        r'(?:From|A partire da|Desde)\s*[€$£]\s*(\d+(?:[.,]\d{2})?)',
+                        r'(?:From|A partire da|Desde)\s*(\d+(?:[.,]\d{2})?)\s*[€$£]',
+                        r'[€$£]\s*(\d+(?:[.,]\d{2})?)\s*(?:per person|a persona)?',
                     ]
 
-                    price_text = None
-                    for selector in price_selectors:
-                        price_elem = card.locator(selector).first
-                        if await price_elem.count() > 0:
-                            price_text = await price_elem.text_content()
-                            if price_text:
-                                break
-
-                    # If no specific price element, try to find price pattern in card text
-                    if not price_text:
-                        card_text = await card.text_content()
-                        # Look for price pattern like "€59" or "59 €" or "From €59"
-                        price_match = re.search(r'(?:From\s*)?[€$£]\s*(\d+(?:[.,]\d{2})?)|(\d+(?:[.,]\d{2})?)\s*[€$£]', card_text or "")
+                    for pattern in price_patterns:
+                        price_match = re.search(pattern, card_text, re.IGNORECASE)
                         if price_match:
-                            price_text = price_match.group(1) or price_match.group(2)
-
-                    if price_text:
-                        # Clean and parse price
-                        price_clean = re.sub(r'[^\d.,]', '', price_text)
-                        price_clean = price_clean.replace(',', '.')
-                        if price_clean:
+                            price_str = price_match.group(1).replace(',', '.')
                             try:
-                                price_value = Decimal(price_clean)
-                                if price_value > 0:
-                                    prices_by_url[href] = price_value
-                                    logger.debug(f"Extracted price {price_value} for {href}")
+                                price_value = Decimal(price_str)
+                                # Sanity check: prices should typically be > 1 and < 10000
+                                if price_value > 1 and price_value < 10000:
+                                    logger.debug(f"Extracted price {price_value} for {href} via pattern")
+                                    break
+                                else:
+                                    price_value = None
                             except Exception:
-                                pass
+                                price_value = None
+
+                    # If still no price, try specific selectors but verify with currency
+                    if not price_value:
+                        price_selectors = [
+                            ".comfort-card__price__current",
+                            ".m-activity-card__price",
+                            ".a-activity-card__price-current",
+                        ]
+                        for selector in price_selectors:
+                            try:
+                                price_elem = card.locator(selector).first
+                                if await price_elem.count() > 0:
+                                    elem_text = await price_elem.text_content()
+                                    # Only accept if it contains a currency symbol
+                                    if elem_text and ('€' in elem_text or '$' in elem_text or '£' in elem_text):
+                                        price_clean = re.sub(r'[^\d.,]', '', elem_text)
+                                        price_clean = price_clean.replace(',', '.')
+                                        if price_clean:
+                                            price_value = Decimal(price_clean)
+                                            if price_value > 1 and price_value < 10000:
+                                                logger.debug(f"Extracted price {price_value} for {href} via selector")
+                                                break
+                                            else:
+                                                price_value = None
+                            except Exception:
+                                continue
+
+                    if price_value:
+                        prices_by_url[href] = price_value
 
                 except Exception as e:
                     logger.debug(f"Error extracting price from card {i}: {e}")
@@ -345,8 +363,12 @@ class CivitatisScraper:
                 name = imp.get("name", "").replace("39s", "'s")  # Fix encoding
                 tour_url = imp.get("url")
 
+                gtm_price = imp.get("price", 0)
+
                 # Prefer HTML-displayed price over GTMData price
+                # Note: GTMData prices are often incorrect (internal/analytics prices)
                 price = None
+
                 if html_prices:
                     # Try to match by URL or tour name
                     tour_url_slug = tour_url.rstrip('/').split('/')[-1] if tour_url else None
@@ -370,7 +392,6 @@ class CivitatisScraper:
 
                 # Fall back to GTMData price if no HTML price found
                 if price is None:
-                    gtm_price = imp.get("price", 0)
                     if gtm_price and gtm_price > 0:
                         price = Decimal(str(gtm_price))
                         logger.debug(f"Using GTMData price {price} for {name} (no HTML price)")
@@ -385,7 +406,8 @@ class CivitatisScraper:
                     currency=currency,
                     category=imp.get("category"),
                     url=tour_url,
-                    rating=Decimal(str(imp.get("dimension32", 0))) if imp.get("dimension32") else None,
+                    # Note: dimension32 is not a reliable rating source, so we don't use it
+                    rating=None,
                     position=imp.get("position"),
                     brand_id=imp.get("brand"),
                     destination=destination or imp.get("list"),
