@@ -131,13 +131,13 @@ export default function AlertsPage() {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                     {alert.threshold_price
-                      ? `€${alert.threshold_price.toFixed(2)}`
+                      ? `€${parseFloat(alert.threshold_price).toFixed(2)}`
                       : alert.threshold_percentage
                       ? `${alert.threshold_percentage}%`
                       : '-'}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                    €{alert.tour_current_price?.toFixed(2)}
+                    €{alert.tour_current_price ? parseFloat(alert.tour_current_price).toFixed(2) : '-'}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span

@@ -120,7 +120,7 @@ export default function ToursPage() {
                     {tour.rating && (
                       <span className="flex items-center text-sm text-gray-600">
                         <Star className="w-4 h-4 text-yellow-400 fill-yellow-400 mr-1" />
-                        {tour.rating.toFixed(1)}
+                        {parseFloat(tour.rating).toFixed(1)}
                       </span>
                     )}
                   </div>
@@ -136,11 +136,11 @@ export default function ToursPage() {
                   <div className="flex items-end justify-between">
                     <div>
                       <p className="text-2xl font-bold text-primary-600">
-                        {tour.currency} {tour.current_price.toFixed(2)}
+                        {tour.currency} {parseFloat(tour.current_price).toFixed(2)}
                       </p>
-                      {tour.min_price && tour.min_price < tour.current_price && (
+                      {tour.min_price && parseFloat(tour.min_price) < parseFloat(tour.current_price) && (
                         <p className="text-sm text-gray-500">
-                          Min: {tour.currency} {tour.min_price.toFixed(2)}
+                          Min: {tour.currency} {parseFloat(tour.min_price).toFixed(2)}
                         </p>
                       )}
                     </div>
