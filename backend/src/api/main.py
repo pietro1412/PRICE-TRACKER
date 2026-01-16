@@ -66,6 +66,7 @@ from src.api.routes import (
     admin_router,
     alerts_router,
     auth_router,
+    notifications_router,
     price_history_router,
     tours_router,
 )
@@ -74,4 +75,5 @@ app.include_router(auth_router, prefix="/api")
 app.include_router(tours_router, prefix="/api")
 app.include_router(price_history_router, prefix="/api")
 app.include_router(alerts_router, prefix="/api")
+app.include_router(notifications_router, prefix="/api")
 app.include_router(admin_router, prefix="/api")

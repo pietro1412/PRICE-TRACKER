@@ -7,6 +7,11 @@ from src.schemas.alert import (
     AlertUpdate,
     AlertWithTourResponse,
 )
+from src.schemas.notification import (
+    NotificationListResponse,
+    NotificationResponse,
+    NotificationWithTourResponse,
+)
 from src.schemas.price_history import (
     PriceHistoryCreate,
     PriceHistoryListResponse,
@@ -54,4 +59,8 @@ __all__ = [
     "AlertResponse",
     "AlertWithTourResponse",
     "AlertListResponse",
+    # Notification
+    "NotificationResponse",
+    "NotificationWithTourResponse",
+    "NotificationListResponse",
 ]
