@@ -57,7 +57,7 @@ def upgrade() -> None:
         sa.Column("category", sa.String(255), nullable=True),
         sa.Column("currency", sa.String(3), nullable=False, server_default="EUR"),
         sa.Column("current_price", sa.Numeric(10, 2), nullable=False),
-        sa.Column("rating", sa.Numeric(3, 2), nullable=True),
+        sa.Column("rating", sa.Numeric(5, 2), nullable=True),
         sa.Column(
             "first_seen_at",
             sa.DateTime(timezone=True),
