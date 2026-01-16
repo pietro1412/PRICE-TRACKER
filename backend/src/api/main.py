@@ -51,10 +51,10 @@ async def health_check():
     }
 
 
-# Routes will be added here as they are developed
-# from src.api.routes import auth, tours, watchlist, alerts, admin
-# app.include_router(auth.router, prefix="/api")
-# app.include_router(tours.router, prefix="/api")
-# app.include_router(watchlist.router, prefix="/api")
-# app.include_router(alerts.router, prefix="/api")
-# app.include_router(admin.router, prefix="/api")
+# Include API routes
+from src.api.routes import alerts_router, auth_router, price_history_router, tours_router
+
+app.include_router(auth_router, prefix="/api")
+app.include_router(tours_router, prefix="/api")
+app.include_router(price_history_router, prefix="/api")
+app.include_router(alerts_router, prefix="/api")
