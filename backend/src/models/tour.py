@@ -25,7 +25,7 @@ class Tour(Base):
 
     # Current price snapshot
     current_price: Mapped[Decimal] = mapped_column(Numeric(10, 2), nullable=False)
-    rating: Mapped[Decimal | None] = mapped_column(Numeric(3, 2), nullable=True)
+    rating: Mapped[Decimal | None] = mapped_column(Numeric(5, 2), nullable=True)
 
     # Tracking metadata
     first_seen_at: Mapped[datetime] = mapped_column(

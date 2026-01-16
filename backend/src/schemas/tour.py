@@ -17,7 +17,7 @@ class TourBase(BaseModel):
     destination: str | None = None
     destination_id: int | None = None
     category: str | None = None
-    rating: Decimal | None = Field(None, ge=0, le=5)
+    rating: Decimal | None = Field(None, ge=0, le=100)
 
 
 class TourCreate(TourBase):
@@ -34,7 +34,7 @@ class TourUpdate(BaseModel):
     url: str | None = None
     destination: str | None = None
     category: str | None = None
-    rating: Decimal | None = Field(None, ge=0, le=5)
+    rating: Decimal | None = Field(None, ge=0, le=100)
     is_active: bool | None = None
 
 
