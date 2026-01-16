@@ -96,7 +96,7 @@ export default function DashboardPage() {
                 </div>
                 <div className="ml-4 text-right">
                   <p className="text-sm font-semibold text-gray-900">
-                    {tour.currency} {tour.current_price.toFixed(2)}
+                    {tour.currency} {parseFloat(tour.current_price).toFixed(2)}
                   </p>
                 </div>
               </Link>
