@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Price Tracker - Documentazione Piattaforma</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-600: #4b5563;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+            --green-500: #22c55e;
+            --red-500: #ef4444;
+            --orange-500: #f97316;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--gray-800);
+            background: var(--gray-50);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 3rem 0;
+            margin-bottom: 3rem;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            opacity: 0.9;
+            font-size: 1.2rem;
+        }
+
+        .section {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .section h2 {
+            color: var(--primary);
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--gray-100);
+        }
+
+        .section h3 {
+            color: var(--gray-800);
+            font-size: 1.2rem;
+            margin: 1.5rem 0 0.75rem 0;
+        }
+
+        .section p {
+            color: var(--gray-600);
+            margin-bottom: 1rem;
+        }
+
+        .section ul, .section ol {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--gray-600);
+        }
+
+        .section li {
+            margin-bottom: 0.5rem;
+        }
+
+        .highlight-box {
+            background: var(--gray-100);
+            border-left: 4px solid var(--primary);
+            padding: 1rem 1.5rem;
+            margin: 1rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .highlight-box.warning {
+            border-left-color: var(--orange-500);
+            background: #fff7ed;
+        }
+
+        .highlight-box.success {
+            border-left-color: var(--green-500);
+            background: #f0fdf4;
+        }
+
+        .data-flow {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            align-items: center;
+            justify-content: center;
+            margin: 2rem 0;
+        }
+
+        .flow-step {
+            background: var(--gray-100);
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            min-width: 150px;
+        }
+
+        .flow-step.source {
+            background: #dbeafe;
+            border: 2px solid var(--primary);
+        }
+
+        .flow-step.process {
+            background: #fef3c7;
+            border: 2px solid var(--orange-500);
+        }
+
+        .flow-step.storage {
+            background: #d1fae5;
+            border: 2px solid var(--green-500);
+        }
+
+        .flow-arrow {
+            font-size: 1.5rem;
+            color: var(--gray-600);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+
+        th, td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        th {
+            background: var(--gray-100);
+            font-weight: 600;
+            color: var(--gray-800);
+        }
+
+        tr:hover {
+            background: var(--gray-50);
+        }
+
+        code {
+            background: var(--gray-100);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 0.9em;
+        }
+
+        .tech-stack {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .tech-item {
+            background: var(--gray-100);
+            padding: 1rem;
+            border-radius: 8px;
+        }
+
+        .tech-item strong {
+            color: var(--primary);
+        }
+
+        .price-example {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+            margin: 1rem 0;
+        }
+
+        .price-card {
+            flex: 1;
+            min-width: 280px;
+            border: 1px solid var(--gray-200);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .price-card-header {
+            background: var(--primary);
+            color: white;
+            padding: 0.75rem 1rem;
+            font-weight: 600;
+        }
+
+        .price-card-body {
+            padding: 1rem;
+        }
+
+        .price-card-body p {
+            margin-bottom: 0.5rem;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .badge-blue { background: #dbeafe; color: var(--primary); }
+        .badge-green { background: #d1fae5; color: #059669; }
+        .badge-orange { background: #fed7aa; color: #c2410c; }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--gray-600);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            header h1 {
+                font-size: 1.8rem;
+            }
+
+            .data-flow {
+                flex-direction: column;
+            }
+
+            .flow-arrow {
+                transform: rotate(90deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Price Tracker</h1>
+            <p>Sistema di monitoraggio prezzi per tour turistici</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Cos'è -->
+        <section class="section">
+            <h2>Cos'è Price Tracker?</h2>
+            <p>
+                Price Tracker è un'applicazione web che monitora automaticamente i prezzi dei tour turistici
+                dal sito <strong>Civitatis</strong>, una delle principali piattaforme di prenotazione
+                di attività ed escursioni in tutto il mondo.
+            </p>
+            <p>
+                L'obiettivo è permettere agli utenti di:
+            </p>
+            <ul>
+                <li>Tenere traccia dell'andamento dei prezzi nel tempo</li>
+                <li>Ricevere notifiche quando un prezzo scende sotto una soglia desiderata</li>
+                <li>Identificare il momento migliore per prenotare un tour</li>
+                <li>Confrontare i prezzi tra diverse attività e destinazioni</li>
+            </ul>
+        </section>
+
+        <!-- Fonte Dati -->
+        <section class="section">
+            <h2>Fonte dei Dati</h2>
+
+            <div class="highlight-box">
+                <strong>Fonte unica:</strong> Tutti i dati provengono da
+                <a href="https://www.civitatis.com" target="_blank">Civitatis.com</a>
+            </div>
+
+            <h3>Cos'è Civitatis?</h3>
+            <p>
+                Civitatis è una piattaforma online fondata nel 2008 che offre tour guidati,
+                escursioni, attività ed esperienze in oltre 3.000 destinazioni nel mondo.
+                È uno dei leader di mercato in Europa e America Latina.
+            </p>
+
+            <h3>Come vengono estratti i dati?</h3>
+            <p>
+                Il sistema utilizza <strong>web scraping</strong> per estrarre i dati dalle pagine
+                delle destinazioni su Civitatis. In particolare:
+            </p>
+
+            <ol>
+                <li>
+                    <strong>Navigazione automatica:</strong> Un browser headless (Playwright/Chromium)
+                    visita le pagine delle destinazioni come farebbe un utente normale.
+                </li>
+                <li>
+                    <strong>Estrazione GTMData:</strong> Civitatis include nelle sue pagine un oggetto
+                    JavaScript chiamato <code>GTMData</code> (Google Tag Manager Data) che contiene
+                    informazioni strutturate sui tour visualizzati.
+                </li>
+                <li>
+                    <strong>Parsing dei dati:</strong> Il sistema estrae da <code>GTMData.ecommerce.impressions</code>
+                    le informazioni su ogni tour: ID, nome, prezzo, categoria, rating.
+                </li>
+            </ol>
+
+            <div class="data-flow">
+                <div class="flow-step source">
+                    <strong>Civitatis</strong><br>
+                    <small>Pagine destinazioni</small>
+                </div>
+                <span class="flow-arrow">→</span>
+                <div class="flow-step process">
+                    <strong>Scraper</strong><br>
+                    <small>Playwright + BeautifulSoup</small>
+                </div>
+                <span class="flow-arrow">→</span>
+                <div class="flow-step storage">
+                    <strong>Database</strong><br>
+                    <small>PostgreSQL</small>
+                </div>
+                <span class="flow-arrow">→</span>
+                <div class="flow-step">
+                    <strong>Frontend</strong><br>
+                    <small>React Dashboard</small>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tipo di Prezzi -->
+        <section class="section">
+            <h2>Interpretazione dei Prezzi</h2>
+
+            <div class="highlight-box warning">
+                <strong>Importante:</strong> I prezzi mostrati sono i prezzi <em>"a partire da"</em>
+                che Civitatis mostra nelle card di anteprima dei tour, NON i prezzi finali.
+            </div>
+
+            <h3>Cosa significa "a partire da"?</h3>
+            <p>
+                Civitatis mostra nelle pagine delle destinazioni il prezzo minimo per ogni tour.
+                Questo prezzo può variare in base a:
+            </p>
+            <ul>
+                <li><strong>Data selezionata:</strong> Alcuni giorni costano più di altri (weekend, festivi)</li>
+                <li><strong>Orario del tour:</strong> Le fasce orarie più richieste possono costare di più</li>
+                <li><strong>Numero di partecipanti:</strong> Prezzi per persona possono variare per gruppi</li>
+                <li><strong>Opzioni aggiuntive:</strong> Tour base vs. tour con extra (pranzo, skip-the-line, etc.)</li>
+            </ul>
+
+            <div class="price-example">
+                <div class="price-card">
+                    <div class="price-card-header">Esempio: Musei Vaticani</div>
+                    <div class="price-card-body">
+                        <p><strong>Prezzo mostrato:</strong> €20,00</p>
+                        <p><strong>Questo è:</strong> Il prezzo minimo disponibile</p>
+                        <p><strong>Prezzo reale:</strong> €20 - €85 a seconda di:</p>
+                        <ul>
+                            <li>Tour base vs. completo</li>
+                            <li>Guida in italiano vs. inglese</li>
+                            <li>Con/senza Cappella Sistina</li>
+                            <li>Accesso prioritario</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="price-card">
+                    <div class="price-card-header">Esempio: Free Tour</div>
+                    <div class="price-card-body">
+                        <p><strong>Prezzo mostrato:</strong> €2,50</p>
+                        <p><strong>Questo è:</strong> Il contributo minimo suggerito</p>
+                        <p><strong>Come funziona:</strong></p>
+                        <ul>
+                            <li>I "Free Tour" sono tour a mancia</li>
+                            <li>€2,50 è la quota di prenotazione</li>
+                            <li>A fine tour si lascia una mancia libera</li>
+                            <li>Mancia consigliata: €5-15/persona</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <h3>Perché monitorare comunque questi prezzi?</h3>
+            <p>
+                Anche se sono prezzi "a partire da", monitorarli è utile perché:
+            </p>
+            <ul>
+                <li>Se il prezzo base scende, spesso scendono proporzionalmente anche le altre opzioni</li>
+                <li>Permette di identificare promozioni e offerte speciali</li>
+                <li>Consente di confrontare tour simili tra loro</li>
+                <li>Aiuta a capire la stagionalità dei prezzi</li>
+            </ul>
+        </section>
+
+        <!-- Destinazioni -->
+        <section class="section">
+            <h2>Destinazioni Monitorate</h2>
+            <p>
+                Il sistema può monitorare qualsiasi destinazione presente su Civitatis.
+                Di default sono configurate le principali città turistiche:
+            </p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Destinazione</th>
+                        <th>ID Civitatis</th>
+                        <th>URL</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Roma</td>
+                        <td>19</td>
+                        <td><code>civitatis.com/en/rome/</code></td>
+                    </tr>
+                    <tr>
+                        <td>Firenze</td>
+                        <td>-</td>
+                        <td><code>civitatis.com/en/florence/</code></td>
+                    </tr>
+                    <tr>
+                        <td>Venezia</td>
+                        <td>-</td>
+                        <td><code>civitatis.com/en/venice/</code></td>
+                    </tr>
+                    <tr>
+                        <td>Parigi</td>
+                        <td>-</td>
+                        <td><code>civitatis.com/en/paris/</code></td>
+                    </tr>
+                    <tr>
+                        <td>Barcellona</td>
+                        <td>-</td>
+                        <td><code>civitatis.com/en/barcelona/</code></td>
+                    </tr>
+                    <tr>
+                        <td>Londra</td>
+                        <td>-</td>
+                        <td><code>civitatis.com/en/london/</code></td>
+                    </tr>
+                    <tr>
+                        <td>Amsterdam</td>
+                        <td>-</td>
+                        <td><code>civitatis.com/en/amsterdam/</code></td>
+                    </tr>
+                    <tr>
+                        <td>Madrid</td>
+                        <td>-</td>
+                        <td><code>civitatis.com/en/madrid/</code></td>
+                    </tr>
+                    <tr>
+                        <td>Milano</td>
+                        <td>-</td>
+                        <td><code>civitatis.com/en/milan/</code></td>
+                    </tr>
+                    <tr>
+                        <td>Napoli</td>
+                        <td>-</td>
+                        <td><code>civitatis.com/en/naples/</code></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Funzionalità -->
+        <section class="section">
+            <h2>Funzionalità della Piattaforma</h2>
+
+            <h3>1. Catalogo Tour</h3>
+            <p>
+                Visualizza tutti i tour monitorati con filtri per destinazione, categoria e prezzo.
+                Ogni tour mostra: nome, prezzo attuale, prezzo minimo storico, rating.
+            </p>
+
+            <h3>2. Dettaglio Tour</h3>
+            <p>
+                Per ogni tour puoi vedere:
+            </p>
+            <ul>
+                <li>Grafico dell'andamento del prezzo negli ultimi 30 giorni</li>
+                <li>Statistiche: prezzo minimo, massimo, medio</li>
+                <li>Variazione percentuale rispetto a 7 giorni fa</li>
+                <li>Link diretto alla pagina Civitatis per prenotare</li>
+            </ul>
+
+            <h3>3. Sistema di Alert</h3>
+            <p>Puoi creare alert personalizzati per essere notificato quando:</p>
+            <ul>
+                <li><span class="badge badge-green">Price Drop</span> Il prezzo scende sotto una soglia specifica</li>
+                <li><span class="badge badge-orange">Price Increase</span> Il prezzo sale sopra una soglia specifica</li>
+                <li><span class="badge badge-blue">% Drop</span> Il prezzo cala di una certa percentuale</li>
+                <li><span class="badge badge-blue">Any Change</span> Qualsiasi variazione di prezzo</li>
+            </ul>
+
+            <h3>4. Sync Automatico</h3>
+            <p>
+                Il sistema sincronizza automaticamente i prezzi ogni <strong>6 ore</strong>
+                (configurabile). Ad ogni sync:
+            </p>
+            <ol>
+                <li>Lo scraper visita le pagine delle destinazioni configurate</li>
+                <li>Estrae i prezzi aggiornati di tutti i tour</li>
+                <li>Confronta con i prezzi precedenti nel database</li>
+                <li>Registra le variazioni nello storico prezzi</li>
+                <li>Verifica gli alert attivi e invia notifiche se necessario</li>
+            </ol>
+        </section>
+
+        <!-- Stack Tecnico -->
+        <section class="section">
+            <h2>Stack Tecnologico</h2>
+
+            <div class="tech-stack">
+                <div class="tech-item">
+                    <strong>Backend</strong><br>
+                    Python 3.12, FastAPI, SQLAlchemy (async), PostgreSQL
+                </div>
+                <div class="tech-item">
+                    <strong>Frontend</strong><br>
+                    React 18, TypeScript, Vite, Tailwind CSS
+                </div>
+                <div class="tech-item">
+                    <strong>Scraping</strong><br>
+                    Playwright (Chromium headless), BeautifulSoup4
+                </div>
+                <div class="tech-item">
+                    <strong>Infrastructure</strong><br>
+                    Docker, docker-compose, Nginx
+                </div>
+            </div>
+        </section>
+
+        <!-- Limitazioni -->
+        <section class="section">
+            <h2>Limitazioni e Note</h2>
+
+            <div class="highlight-box warning">
+                <strong>Disclaimer:</strong> Questo progetto è solo a scopo educativo e personale.
+                I dati appartengono a Civitatis. Rispetta sempre i termini di servizio dei siti web.
+            </div>
+
+            <h3>Limitazioni tecniche</h3>
+            <ul>
+                <li>
+                    <strong>Rate limiting:</strong> Per non sovraccaricare Civitatis, il sistema
+                    aspetta 30 secondi tra una richiesta e l'altra.
+                </li>
+                <li>
+                    <strong>Prezzi parziali:</strong> Vengono estratti solo i tour visibili nella
+                    prima pagina di ogni destinazione (tipicamente 15-20 tour).
+                </li>
+                <li>
+                    <strong>Cambio struttura:</strong> Se Civitatis modifica la struttura delle
+                    pagine o del GTMData, lo scraper potrebbe smettere di funzionare.
+                </li>
+            </ul>
+
+            <h3>Accuratezza dei dati</h3>
+            <ul>
+                <li>I prezzi sono aggiornati ogni 6 ore, non in tempo reale</li>
+                <li>Il rating è quello mostrato da Civitatis (scala 0-100, non 5 stelle)</li>
+                <li>I prezzi possono variare tra il momento dello scraping e la prenotazione</li>
+            </ul>
+        </section>
+
+        <!-- Come Usare -->
+        <section class="section">
+            <h2>Come Usare la Piattaforma</h2>
+
+            <ol>
+                <li>
+                    <strong>Registrati/Login:</strong> Crea un account o accedi con le credenziali esistenti
+                </li>
+                <li>
+                    <strong>Esplora i Tour:</strong> Vai nella sezione "Tour" per vedere tutti i tour disponibili
+                </li>
+                <li>
+                    <strong>Crea Alert:</strong> Clicca su un tour e usa "Crea Alert" per impostare
+                    una notifica quando il prezzo raggiunge la soglia desiderata
+                </li>
+                <li>
+                    <strong>Monitora:</strong> Controlla la Dashboard per avere una panoramica
+                    e le Notifiche per vedere gli alert scattati
+                </li>
+                <li>
+                    <strong>Prenota:</strong> Quando trovi un buon prezzo, clicca "Vedi su Civitatis"
+                    per andare direttamente alla pagina di prenotazione
+                </li>
+            </ol>
+        </section>
+    </div>
+
+    <footer>
+        <p>Price Tracker - Documentazione v1.0</p>
+        <p>Progetto educativo - I dati provengono da Civitatis.com</p>
+    </footer>
+</body>
+</html>
