@@ -26,7 +26,7 @@ services:
       - DATABASE_URL=postgresql+asyncpg://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@db:5432/${POSTGRES_DB:-pricetracker}
       - SECRET_KEY=${SECRET_KEY:-change-me-in-production}
       - DEBUG=${DEBUG:-false}
-      - CORS_ORIGINS=${CORS_ORIGINS:-http://localhost:5173,http://localhost:5174}
+      - CORS_ORIGINS=${CORS_ORIGINS:-http://localhost:5175,http://localhost:5173}
       - SCRAPE_RATE_LIMIT_SECONDS=${SCRAPE_RATE_LIMIT_SECONDS:-30}
       - SYNC_PRICES_INTERVAL_HOURS=${SYNC_PRICES_INTERVAL_HOURS:-6}
     ports:
@@ -44,9 +44,9 @@ services:
       dockerfile: Dockerfile
     container_name: pricetracker_frontend
     environment:
-      - VITE_API_URL=${VITE_API_URL:-http://localhost:8000}
+      - VITE_API_URL=${VITE_API_URL:-http://backend:8000}
     ports:
-      - "${FRONTEND_PORT:-5173}:5173"
+      - "${FRONTEND_PORT:-5175}:5173"
     volumes:
       - ./frontend:/app
       - /app/node_modules
