@@ -112,21 +112,21 @@ export default function NotificationsPage() {
                     <p className="text-sm text-gray-600 mt-1">
                       {notification.message || (
                         <>
-                          Il prezzo è cambiato da €{notification.old_price.toFixed(2)} a €
-                          {notification.new_price.toFixed(2)}
+                          Il prezzo è cambiato da €{parseFloat(notification.old_price).toFixed(2)} a €
+                          {parseFloat(notification.new_price).toFixed(2)}
                         </>
                       )}
                     </p>
                     <div className="flex items-center gap-4 mt-2">
                       <span
                         className={`text-sm font-medium ${
-                          notification.price_change < 0 ? 'text-green-600' : 'text-red-600'
+                          parseFloat(notification.price_change) < 0 ? 'text-green-600' : 'text-red-600'
                         }`}
                       >
-                        {notification.price_change > 0 ? '+' : ''}€
-                        {notification.price_change.toFixed(2)} (
-                        {notification.price_change_percent > 0 ? '+' : ''}
-                        {notification.price_change_percent.toFixed(1)}%)
+                        {parseFloat(notification.price_change) > 0 ? '+' : ''}€
+                        {parseFloat(notification.price_change).toFixed(2)} (
+                        {parseFloat(notification.price_change_percent) > 0 ? '+' : ''}
+                        {parseFloat(notification.price_change_percent).toFixed(1)}%)
                       </span>
                       <span className="text-xs text-gray-400">
                         {formatDate(notification.sent_at)}

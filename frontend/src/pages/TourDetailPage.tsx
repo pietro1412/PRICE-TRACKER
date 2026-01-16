@@ -80,7 +80,7 @@ export default function TourDetailPage() {
         day: '2-digit',
         month: '2-digit',
       }),
-      price: item.price,
+      price: parseFloat(item.price),
     }))
 
   return (
@@ -104,7 +104,7 @@ export default function TourDetailPage() {
               {tourData?.rating && (
                 <span className="flex items-center text-sm text-gray-600">
                   <Star className="w-4 h-4 text-yellow-400 fill-yellow-400 mr-1" />
-                  {tourData.rating.toFixed(1)}
+                  {parseFloat(tourData.rating).toFixed(1)}
                 </span>
               )}
             </div>
@@ -116,7 +116,7 @@ export default function TourDetailPage() {
 
           <div className="text-right">
             <p className="text-3xl font-bold text-primary-600">
-              {tourData?.currency} {tourData?.current_price?.toFixed(2)}
+              {tourData?.currency} {tourData?.current_price ? parseFloat(tourData.current_price).toFixed(2) : ''}
             </p>
             <div className="flex items-center justify-end gap-4 mt-2">
               <button
@@ -147,35 +147,35 @@ export default function TourDetailPage() {
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
           <p className="text-sm text-gray-500">Prezzo Minimo</p>
           <p className="text-xl font-bold text-green-600">
-            {stats?.min_price ? `€${stats.min_price.toFixed(2)}` : '-'}
+            {stats?.min_price ? `€${parseFloat(stats.min_price).toFixed(2)}` : '-'}
           </p>
         </div>
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
           <p className="text-sm text-gray-500">Prezzo Massimo</p>
           <p className="text-xl font-bold text-red-600">
-            {stats?.max_price ? `€${stats.max_price.toFixed(2)}` : '-'}
+            {stats?.max_price ? `€${parseFloat(stats.max_price).toFixed(2)}` : '-'}
           </p>
         </div>
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
           <p className="text-sm text-gray-500">Prezzo Medio</p>
           <p className="text-xl font-bold text-gray-900">
-            {stats?.avg_price ? `€${stats.avg_price.toFixed(2)}` : '-'}
+            {stats?.avg_price ? `€${parseFloat(stats.avg_price).toFixed(2)}` : '-'}
           </p>
         </div>
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
           <p className="text-sm text-gray-500">Var. 7 giorni</p>
           <p
             className={`text-xl font-bold flex items-center ${
-              stats?.price_change_7d > 0
+              parseFloat(stats?.price_change_7d) > 0
                 ? 'text-red-600'
-                : stats?.price_change_7d < 0
+                : parseFloat(stats?.price_change_7d) < 0
                 ? 'text-green-600'
                 : 'text-gray-900'
             }`}
           >
-            {stats?.price_change_7d > 0 && <TrendingUp className="w-5 h-5 mr-1" />}
-            {stats?.price_change_7d < 0 && <TrendingDown className="w-5 h-5 mr-1" />}
-            {stats?.price_change_7d ? `€${stats.price_change_7d.toFixed(2)}` : '-'}
+            {parseFloat(stats?.price_change_7d) > 0 && <TrendingUp className="w-5 h-5 mr-1" />}
+            {parseFloat(stats?.price_change_7d) < 0 && <TrendingDown className="w-5 h-5 mr-1" />}
+            {stats?.price_change_7d ? `€${parseFloat(stats.price_change_7d).toFixed(2)}` : '-'}
           </p>
         </div>
       </div>
@@ -242,7 +242,7 @@ export default function TourDetailPage() {
                     type="number"
                     value={thresholdPrice}
                     onChange={(e) => setThresholdPrice(e.target.value)}
-                    placeholder={`Es: ${(tourData?.current_price * 0.9).toFixed(2)}`}
+                    placeholder={`Es: ${(parseFloat(tourData?.current_price || 0) * 0.9).toFixed(2)}`}
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500"
                   />
                 </div>
