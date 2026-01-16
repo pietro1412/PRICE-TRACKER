@@ -13,13 +13,23 @@ logger = get_logger(__name__)
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Application lifespan handler."""
+    from src.services import civitatis_scraper, scheduler_service
+
     setup_logging(debug=settings.debug)
     logger.info(
         "Starting Price Tracker API",
         version=settings.app_version,
     )
+
+    # Start background scheduler
+    scheduler_service.start()
+
     yield
+
+    # Cleanup on shutdown
     logger.info("Shutting down Price Tracker API")
+    scheduler_service.stop()
+    await civitatis_scraper.close()
 
 
 app = FastAPI(
@@ -52,9 +62,16 @@ async def health_check():
 
 
 # Include API routes
-from src.api.routes import alerts_router, auth_router, price_history_router, tours_router
+from src.api.routes import (
+    admin_router,
+    alerts_router,
+    auth_router,
+    price_history_router,
+    tours_router,
+)
 
 app.include_router(auth_router, prefix="/api")
 app.include_router(tours_router, prefix="/api")
 app.include_router(price_history_router, prefix="/api")
 app.include_router(alerts_router, prefix="/api")
+app.include_router(admin_router, prefix="/api")
